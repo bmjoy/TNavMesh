@@ -29,10 +29,11 @@ public class AStarFinder
             TNavNode current = this.openSet.Pop();
             if (current == targetNode)
             {
+                path.Add(current);
                 while (current.parent != null)
                 {
-                    path.Add(current);
                     current = current.parent;
+                    path.Add(current);
                 }
                 path.Reverse();
 
@@ -66,8 +67,6 @@ public class AStarFinder
                 neighbor.parent = current;
                 neighbor.gScore = gScore;
                 neighbor.fScore = neighbor.gScore + this.HeuristicCostEstimate(neighbor.position, targetPos);
-
-                current.CalculatePortal(i);
             }
         }
 

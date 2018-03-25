@@ -165,10 +165,15 @@ public class TNavMesh
         navPortals.Clear();
         for (int i = 0; i < pathNodes.Count - 1; i++)
         {
-            TNavNode node = pathNodes[i];
+            TNavNode node0 = pathNodes[i];
+            TNavNode node1 = pathNodes[i+1];
 
-            navPortals.Add(TNavMesh.vertices[node.portal0]);
-            navPortals.Add(TNavMesh.vertices[node.portal1]);
+            int left = -1;
+            int right = -1;
+            node0.CalculatePortal(node1, out left, out right);
+
+            navPortals.Add(TNavMesh.vertices[left]);
+            navPortals.Add(TNavMesh.vertices[right]);
         }
 
         navPortals.Add(target);
@@ -180,8 +185,8 @@ public class TNavMesh
     private static Vector3 CalculateCentroid(TNavNode node)
     {
         Vector3 v0 = vertices[node.index0];
-        Vector3 v1 = vertices[node.index0];
-        Vector3 v2 = vertices[node.index0];
+        Vector3 v1 = vertices[node.index1];
+        Vector3 v2 = vertices[node.index2];
 
         return (v0 + v1 + v2) / 3;
     }
@@ -203,7 +208,7 @@ public class TNavMesh
     public static List<Vector3> GetDebugPathNode()
     {
         List<Vector3> nodes = new List<Vector3>();
-        foreach(var node in pathNodes)
+        foreach (var node in pathNodes)
         {
             nodes.Add(vertices[node.index0]);
             nodes.Add(vertices[node.index1]);
@@ -216,5 +221,10 @@ public class TNavMesh
         }
 
         return nodes;
+    }
+
+    public static List<Vector3> GetDebugPortal()
+    {
+        return navPortals;
     }
 }

@@ -66,12 +66,22 @@ public class TNavNode
         this.neighborEdges.Add(edgeIndex);
     }
 
-    public int portal0; //连接下一个Node的边
-    public int portal1;
-    public void CalculatePortal(int index)
+    public void CalculatePortal(TNavNode node, out int left, out int right)
     {
-        int edgeIndex = neighborEdges[index];
-        this.portal0 = this.vertexIndex[edgeIndex];
-        this.portal1 = this.vertexIndex[(edgeIndex+1)%3];
+        for(int i = 0; i < this.neighbors.Count; i++)
+        {
+            if(this.neighbors[i] == node)
+            {
+                int edgeIndex = neighborEdges[i];
+
+                left = this.vertexIndex[edgeIndex];
+                right = this.vertexIndex[(edgeIndex + 1) % 3];
+
+                return;
+            }
+        }
+
+        left = -1;
+        right = -1;
     }
 }

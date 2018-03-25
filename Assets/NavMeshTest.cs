@@ -102,16 +102,23 @@ public class NavMeshTest : MonoBehaviour {
         //    Gizmos.DrawLine(this.portals[i], this.portals[i + 1]);
         //}
 
-        for (int i = 0; i < path.Count - 1; i++)
-        { 
-            Gizmos.color = Color.white;
-            Gizmos.DrawLine(path[i], path[i + 1]);
-        }
-
         for (int i = 0; i < TNavMesh.GetDebugPathNode().Count; i+=2)
         {
             Gizmos.color = Color.black;
             Gizmos.DrawLine(TNavMesh.GetDebugPathNode()[i], TNavMesh.GetDebugPathNode()[i + 1]);
+        }
+
+        for (int i = 0; i < TNavMesh.GetDebugPortal().Count; i += 2)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(TNavMesh.GetDebugPortal()[i], TNavMesh.GetDebugPortal()[i + 1]);
+        }
+
+
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            Gizmos.color = Color.white;
+            Gizmos.DrawLine(path[i], path[i + 1]);
         }
 
         if (unityPath != null)
