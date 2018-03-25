@@ -20,9 +20,11 @@ public class AStarFinder
         sourceNode.gScore = 0;
         sourceNode.fScore = Vector3.Distance(sourcePos, targetPos);
 
+        sourceNode.position = sourcePos;
+        targetNode.position = targetPos;
+
         openSet.Add(sourceNode);
         sourceNode.opened = true;
-        sourceNode.position = sourcePos;
 
         while (openSet.Count != 0)
         {
@@ -52,10 +54,6 @@ public class AStarFinder
 
                 if (neighbor.opened == false)
                 {
-                    if (neighbor == targetNode)
-                        neighbor.position = targetPos;
-                    else
-                        neighbor.position = neighbor.centroid;
                     this.openSet.Add(neighbor);
                     neighbor.opened = true;
                 }

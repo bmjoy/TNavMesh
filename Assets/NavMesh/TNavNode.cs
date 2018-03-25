@@ -47,6 +47,7 @@ public class TNavNode
     public float fScore = float.MaxValue;
     public TNavNode parent = null;
 
+    //use for cost estimate
     public Vector3 position;
 
     public void Reset()
