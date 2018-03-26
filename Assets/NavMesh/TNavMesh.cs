@@ -75,19 +75,19 @@ public class TNavMesh
             //index = (node.index0 << 16) | node.index1;
             if (navNodeDict.TryGetValue(node.index0*65536 + node.index1, out neighbor))
             {
-                node.AddNeighbor(0, neighbor);
+                node.AddNeighbor(neighbor, 0);
             }
 
             //index = (node.index1 << 16) | node.index2;
             if (navNodeDict.TryGetValue(node.index1*65536 + node.index2, out neighbor))
             {
-                node.AddNeighbor(1, neighbor);
+                node.AddNeighbor(neighbor, 1);
             }
 
             //index = (node.index2 << 16) | node.index0;
             if (navNodeDict.TryGetValue(node.index2*65536 + node.index0, out neighbor))
             {
-                node.AddNeighbor(2, neighbor);
+                node.AddNeighbor(neighbor, 2);
             }
         }
         navNodeDict.Clear();

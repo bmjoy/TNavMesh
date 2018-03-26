@@ -61,7 +61,7 @@ public class TNavNode
         this.position = centroid;
     }
 
-    public void AddNeighbor(int edgeIndex, TNavNode neighbor)
+    public void AddNeighbor(TNavNode neighbor, int edgeIndex)
     {
         this.neighbors.Add(neighbor);
         this.neighborEdges.Add(edgeIndex);
