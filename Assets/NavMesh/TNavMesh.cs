@@ -49,7 +49,7 @@ public class TNavMesh
     }
 
     private static List<TNavNode> navNodes = new List<TNavNode>();
-    private static Dictionary<string, TNavNode> navNodeDict = new Dictionary<string, TNavNode>();
+    private static Dictionary<long, TNavNode> navNodeDict = new Dictionary<long, TNavNode>();
     private static void BuildGraph()
     {
         for (int i = 0; i < triangleIndices.Count; i += 3)
@@ -59,32 +59,33 @@ public class TNavMesh
             navNodes.Add(node);
 
             //自己顺时针对邻接三角形来讲是逆时针........
-            //navNodeDict.Add((node.index1 << 32) | node.index0, node);
-            //navNodeDict.Add((node.index2 << 32) | node.index1, node);
-            //navNodeDict.Add((node.index0 << 32) | node.index2, node);
-            navNodeDict.Add(string.Format("{0},{1}", node.index1, node.index0), node);
-            navNodeDict.Add(string.Format("{0},{1}", node.index2, node.index1), node);
-            navNodeDict.Add(string.Format("{0},{1}", node.index0, node.index2), node);
+            //索引都是其实都是uint16
+            //navNodeDict.Add((node.index1 << 16) | node.index0, node);
+            //navNodeDict.Add((node.index2 << 16) | node.index1, node);
+            //navNodeDict.Add((node.index0 << 16) | node.index2, node);
+            navNodeDict.Add(node.index1*65536 + node.index0, node);
+            navNodeDict.Add(node.index2*65536 + node.index1, node);
+            navNodeDict.Add(node.index0*65536 + node.index2, node);
         }
 
         foreach (TNavNode node in navNodes)
         {
             TNavNode neighbor = null;
 
-            //index = (node.index0 << 32) | node.index1;
-            if (navNodeDict.TryGetValue(string.Format("{0},{1}", node.index0, node.index1), out neighbor))
+            //index = (node.index0 << 16) | node.index1;
+            if (navNodeDict.TryGetValue(node.index0*65536 + node.index1, out neighbor))
             {
                 node.AddNeighbor(0, neighbor);
             }
 
-            //index = (node.index1 << 32) | node.index2;
-            if (navNodeDict.TryGetValue(string.Format("{0},{1}", node.index1, node.index2), out neighbor))
+            //index = (node.index1 << 16) | node.index2;
+            if (navNodeDict.TryGetValue(node.index1*65536 + node.index2, out neighbor))
             {
                 node.AddNeighbor(1, neighbor);
             }
 
-            //index = (node.index2 << 32) | node.index0;
-            if (navNodeDict.TryGetValue(string.Format("{0},{1}", node.index2, node.index0), out neighbor))
+            //index = (node.index2 << 16) | node.index0;
+            if (navNodeDict.TryGetValue(node.index2*65536 + node.index0, out neighbor))
             {
                 node.AddNeighbor(2, neighbor);
             }
