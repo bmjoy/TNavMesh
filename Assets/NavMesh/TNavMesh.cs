@@ -148,7 +148,9 @@ public class TNavMesh
             else
             {
                 TNavMesh.Reset();
-                if (TNavMesh.finder.FindPath(sourceNode, targetNode, sourcePosition, targetPosition, TNavMesh.pathNodes))
+                sourceNode.position = sourcePosition;
+                targetNode.position = targetPosition;
+                if (TNavMesh.finder.FindPath(sourceNode, targetNode, TNavMesh.pathNodes))
                 {
                     var portals = CalculatePortals(targetPosition);
                     Funnel.StringPull(sourcePosition, targetPosition, portals, outPath);

@@ -13,16 +13,12 @@ public class AStarFinder
         return Vector3.Distance(v0, v1);
     }
 
-    public bool FindPath(TNavNode sourceNode, TNavNode targetNode, Vector3 sourcePos, Vector3 targetPos, List<TNavNode> path)
+    public bool FindPath(TNavNode sourceNode, TNavNode targetNode, List<TNavNode> path)
     {
         openSet.Clear();
 
         sourceNode.gScore = 0;
-        sourceNode.fScore = Vector3.Distance(sourcePos, targetPos);
-
-        sourceNode.position = sourcePos;
-        targetNode.position = targetPos;
-
+        sourceNode.fScore = Vector3.Distance(sourceNode.position, targetNode.position);
         openSet.Add(sourceNode);
         sourceNode.opened = true;
 
@@ -64,7 +60,7 @@ public class AStarFinder
 
                 neighbor.parent = current;
                 neighbor.gScore = gScore;
-                neighbor.fScore = neighbor.gScore + this.HeuristicCostEstimate(neighbor.position, targetPos);
+                neighbor.fScore = neighbor.gScore + this.HeuristicCostEstimate(neighbor.position, targetNode.position);
             }
         }
 
