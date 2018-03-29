@@ -21,29 +21,28 @@ public class PriorityQueue
 
     public void Add(TNavNode node)
     {
-        for (int i = 0; i < this.list.Count; i++)
-        {
-            if (node.fScore < this.list[i].fScore)
-            {
-                this.list.Insert(i, node);
-                return;
-            }
-
-        }
-
         this.list.Add(node);
     }
 
     public TNavNode Pop()
     {
-        if (this.list.Count > 0)
-        {
-            TNavNode node = this.list[0];
-            this.list.RemoveAt(0);
+        int cout = this.list.Count;
 
-            return node;
+        int index = 0;
+        TNavNode node = this.list[0];
+        for(int i = 1; i < cout; i++)
+        {
+            TNavNode cur = this.list[i];
+            if (cur.fScore < node.fScore)
+            {
+                node = cur;
+                index = i;
+            }
         }
 
-        return null;
+        this.list[index] = this.list[cout - 1];
+        this.list.RemoveAt(cout-1);
+
+        return node;
     }
 }

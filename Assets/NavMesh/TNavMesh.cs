@@ -173,7 +173,7 @@ public class TNavMesh
 
             int left = -1;
             int right = -1;
-            node0.CalculatePortal(node1, out left, out right);
+            node0.FindPortal(node1, out left, out right);
 
             navPortals.Add(TNavMesh.vertices[left]);
             navPortals.Add(TNavMesh.vertices[right]);

@@ -48,19 +48,22 @@ public class AStarFinder
                 if (neighbor.closed == true)
                     continue;
 
-                if (neighbor.opened == false)
-                {
-                    this.openSet.Add(neighbor);
-                    neighbor.opened = true;
-                }
-
                 float gScore = current.gScore + this.HeuristicCostEstimate(current.position, neighbor.position);
-                if (gScore >= neighbor.gScore)
+                if (gScore >= neighbor.gScore)//neighbor.opened == true的话,neighbor.gCost=MaxValue，gCost一定小于neighbor.gCost
                     continue;
 
                 neighbor.parent = current;
                 neighbor.gScore = gScore;
                 neighbor.fScore = neighbor.gScore + this.HeuristicCostEstimate(neighbor.position, targetNode.position);
+
+                if (neighbor.opened == false)
+                {
+                    this.openSet.Add(neighbor);
+                    neighbor.opened = true;
+                }
+                else
+                {
+                }
             }
         }
 

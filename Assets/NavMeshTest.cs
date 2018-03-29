@@ -144,16 +144,19 @@ public class NavMeshTest : MonoBehaviour {
             return;
 
         this.path.Clear();
+        float time = Time.realtimeSinceStartup;
         if(TNavMesh.CalculatePath(startPos, targetPos, this.path))
         {
 
         }
+        Debug.Log("TNavMesh: " + (Time.realtimeSinceStartup-time));
 
-
-        if(NavMesh.CalculatePath(startPos, targetPos, NavMesh.AllAreas, unityPath))
+        time = Time.realtimeSinceStartup;
+        if (NavMesh.CalculatePath(startPos, targetPos, NavMesh.AllAreas, unityPath))
         {
 
         }
+        Debug.Log("UnityNavMesh: " + (Time.realtimeSinceStartup - time));
 
         lastStartPos = startPos;
         lastTargetPos = targetPos;

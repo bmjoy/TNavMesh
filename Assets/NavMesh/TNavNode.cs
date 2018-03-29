@@ -67,7 +67,7 @@ public class TNavNode
         this.neighborEdges.Add(edgeIndex);
     }
 
-    public void CalculatePortal(TNavNode node, out int left, out int right)
+    public bool FindPortal(TNavNode node, out int left, out int right)
     {
         for(int i = 0; i < this.neighbors.Count; i++)
         {
@@ -78,11 +78,12 @@ public class TNavNode
                 left = this.vertexIndex[edgeIndex];
                 right = this.vertexIndex[(edgeIndex + 1) % 3];
 
-                return;
+                return true;
             }
         }
 
         left = -1;
         right = -1;
+        return false;
     }
 }
