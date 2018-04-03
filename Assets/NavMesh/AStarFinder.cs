@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class AStarFinder
 {
-    //todo, openset use min heap
-    private PriorityQueue openSet = new PriorityQueue();
-
+    private TNavNodeQueue openSet = new TNavNodeQueue();
 
     private float HeuristicCostEstimate(Vector3 v0, Vector3 v1)
     {
@@ -47,6 +45,40 @@ public class AStarFinder
 
                 if (neighbor.closed == true)
                     continue;
+
+
+                Vector3 portalLeft, portalRight;
+                current.GetProtal(i, out portalLeft, out portalRight);
+
+                //http://digestingduck.blogspot.fi/2010/05/towards-better-navmesh-path-planning.html
+                //http://digestingduck.blogspot.fi/2010/08/visibility-optimized-graph-experiment.html
+                //if (TNavMeshUtility.isectSegSeg(current.position, targetNode.position, portalLeft, portalRight, ref neighbor.position) == false)
+                //{
+                //    Vector3 newLeft = portalLeft + (portalRight - portalLeft) * 0.1f;
+                //    Vector3 newRight = portalRight + (portalLeft - portalRight) * 0.1f;
+                //    float leftDistance = (targetNode.position - newLeft).sqrMagnitude;
+                //    float rightDistance = (targetNode.position - newRight).sqrMagnitude;
+                //    if (leftDistance < rightDistance)
+                //        neighbor.position = newLeft;
+                //    else
+                //        neighbor.position = newRight;
+                //}
+
+                //neighbor.position = current.position在potal的投影
+                //看起来和上面的方法好像差不多......
+                Vector3 edge = portalRight - portalLeft;
+                float edgeLengthSquare = edge.sqrMagnitude;
+                if (edgeLengthSquare > 0.0001f)
+                {
+                    Vector3 v = current.position - portalLeft;
+                    float pdot = Vector3.Dot(v, edge) / edgeLengthSquare;
+                    pdot = Mathf.Clamp(pdot, 0.05f, 0.95f);
+                    neighbor.position = portalLeft + pdot * edge;
+                }
+                else
+                {
+                    neighbor.position = portalLeft;
+                }
 
                 float gScore = current.gScore + this.HeuristicCostEstimate(current.position, neighbor.position);
                 if (gScore >= neighbor.gScore)//neighbor.opened == true的话,neighbor.gCost=MaxValue，gCost一定小于neighbor.gCost

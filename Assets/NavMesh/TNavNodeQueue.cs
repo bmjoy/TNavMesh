@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
 //先山寨一下
-//todo  use min heap
-public class PriorityQueue
+//todo use min heap
+public class TNavNodeQueue
 {
     List<TNavNode> list = new List<TNavNode>();
 

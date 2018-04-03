@@ -14,16 +14,20 @@ public class NavMeshTest : MonoBehaviour {
 
     AStarFinder finder = new AStarFinder();
 
-	// Use this for initialization
-	void Start () {
+    List<Vector3> debugNavMeshVertices = new List<Vector3>();
+    List<int>   debugNavMeshIndices = new List<int>();
+    // Use this for initialization
+    void Start () {
         unityPath = new NavMeshPath();
 
         MeshFilter meshFilter = this.gameObject.AddComponent<MeshFilter>();
 
         NavMeshTriangulation triangulatedNavMesh  = NavMesh.CalculateTriangulation();
+        debugNavMeshVertices.AddRange(triangulatedNavMesh.vertices);
+        debugNavMeshIndices.AddRange(triangulatedNavMesh.indices);
 
         //weld vertices
-        for(int i = 0; i < triangulatedNavMesh.indices.Length; i+=3)
+        for (int i = 0; i < triangulatedNavMesh.indices.Length; i+=3)
         {
             for(int j = 0; j < 3; j++)
             {
@@ -48,7 +52,8 @@ public class NavMeshTest : MonoBehaviour {
     {
         for(int i = 0; i < vertices.Count; i++)
         {
-            if (vertices[i] == v)
+            //if (vertices[i] == v)
+            if((vertices[i]- v).sqrMagnitude < 0.001f*0.001f)
                 return i;
         }
 
@@ -108,11 +113,25 @@ public class NavMeshTest : MonoBehaviour {
             Gizmos.DrawLine(TNavMesh.GetDebugPathNode()[i], TNavMesh.GetDebugPathNode()[i + 1]);
         }
 
-        for (int i = 0; i < TNavMesh.GetDebugPortal().Count; i += 2)
+        for (int i = 0; i < TNavMesh.GetDebugPathNodePosition().Count - 1; i++)
         {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(TNavMesh.GetDebugPortal()[i], TNavMesh.GetDebugPortal()[i + 1]);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(TNavMesh.GetDebugPathNodePosition()[i], TNavMesh.GetDebugPathNodePosition()[i + 1]);
         }
+
+        //List<Vector3> neighbor = TNavMesh.GetDebugNeighbor(this.target.transform.position);
+        //for (int i = 0; i < neighbor.Count; i+=2)
+        //{
+        //    Gizmos.color = Color.yellow;
+        //    Gizmos.DrawLine(neighbor[i], neighbor[i+1]);
+        //}
+
+
+        //for (int i = 0; i < TNavMesh.GetDebugPortal().Count; i += 2)
+        //{
+        //    Gizmos.color = Color.green;
+        //    Gizmos.DrawLine(TNavMesh.GetDebugPortal()[i], TNavMesh.GetDebugPortal()[i + 1]);
+        //}
 
 
         for (int i = 0; i < path.Count - 1; i++)
@@ -129,6 +148,19 @@ public class NavMeshTest : MonoBehaviour {
                 Gizmos.DrawLine(unityPath.corners[i], unityPath.corners[i + 1]);
             }
         }
+
+        //draw navmesh
+        //for(int i = 0; i < debugNavMeshIndices.Count; i+=3)
+        //{
+        //    Vector3 v0 = debugNavMeshVertices[debugNavMeshIndices[i]];
+        //    Vector3 v1 = debugNavMeshVertices[debugNavMeshIndices[i+1]];
+        //    Vector3 v2 = debugNavMeshVertices[debugNavMeshIndices[i+2]];
+
+        //    Gizmos.color = Color.red;
+        //    Gizmos.DrawLine(v0, v1);
+        //    Gizmos.DrawLine(v1, v2);
+        //    Gizmos.DrawLine(v2, v0);
+        //}
     }
 
     Vector3 lastStartPos = Vector3.positiveInfinity;

@@ -24,9 +24,22 @@ public class TNavNode
         vertexIndex[0] = index0;
         vertexIndex[1] = index1;
         vertexIndex[2] = index2;
+
+        Vector3 v0 = TNavMesh.GetVertex(index0);
+        Vector3 v1 = TNavMesh.GetVertex(index1);
+        Vector3 v2 = TNavMesh.GetVertex(index2);
+
+        this._centroid = (v0 + v1 + v2) / 3;
     }
 
-    public Vector3 centroid;
+    private Vector3 _centroid;
+    public Vector3 centroid
+    {
+        get
+        {
+            return this._centroid;
+        }
+    }
 
     private List<TNavNode> neighbors = new List<TNavNode>(3);
     private List<int> neighborEdges = new List<int>(3);
@@ -85,5 +98,16 @@ public class TNavNode
         left = -1;
         right = -1;
         return false;
+    }
+
+    public void GetProtal(int neighborIndex, out Vector3 left, out Vector3 right)
+    {
+        int edgeIndex = this.neighborEdges[neighborIndex];
+
+        int leftIndex = this.vertexIndex[edgeIndex];
+        int rightIndex = this.vertexIndex[(edgeIndex + 1) % 3];
+
+        left = TNavMesh.GetVertex(leftIndex);
+        right = TNavMesh.GetVertex(rightIndex);
     }
 }

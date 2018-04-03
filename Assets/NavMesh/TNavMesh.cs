@@ -55,7 +55,6 @@ public class TNavMesh
         for (int i = 0; i < triangleIndices.Count; i += 3)
         {
             TNavNode node = new TNavNode(triangleIndices[i], triangleIndices[i + 1], triangleIndices[i + 2]);
-            node.centroid = CalculateCentroid(node);
             navNodes.Add(node);
 
             //自己顺时针对邻接三角形来讲是逆时针........
@@ -185,15 +184,6 @@ public class TNavMesh
         return navPortals;
     }
 
-    private static Vector3 CalculateCentroid(TNavNode node)
-    {
-        Vector3 v0 = vertices[node.index0];
-        Vector3 v1 = vertices[node.index1];
-        Vector3 v2 = vertices[node.index2];
-
-        return (v0 + v1 + v2) / 3;
-    }
-
     private static TNavNode GetNode(Vector3 pos)
     {
         Ray ray = new Ray(pos, new Vector3(0, -1, 0));
@@ -205,6 +195,11 @@ public class TNavMesh
         }
 
         return null;
+    }
+
+    public static Vector3 GetVertex(int index)
+    {
+        return TNavMesh.vertices[index];
     }
 
     //for debug
@@ -226,8 +221,43 @@ public class TNavMesh
         return nodes;
     }
 
+    public static List<Vector3> GetDebugPathNodePosition()
+    {
+        List<Vector3> path = new List<Vector3>();
+        foreach (var node in pathNodes)
+        {
+            path.Add(node.position);
+        }
+
+        return path;
+    }
+
     public static List<Vector3> GetDebugPortal()
     {
         return navPortals;
+    }
+
+    public static List<Vector3> GetDebugNeighbor(Vector3 pos)
+    {
+        List<Vector3> lines = new List<Vector3>();
+        TNavNode node = TNavMesh.GetNode(pos);
+        if(node != null)
+        {
+            for(int i = 0; i < node.GetNeighborCount(); i++)
+            {
+                TNavNode neightbor = node.GetNeighbor(i);
+
+                lines.Add(vertices[neightbor.index0]);
+                lines.Add(vertices[neightbor.index1]);
+
+                lines.Add(vertices[neightbor.index1]);
+                lines.Add(vertices[neightbor.index2]);
+
+                lines.Add(vertices[neightbor.index2]);
+                lines.Add(vertices[neightbor.index0]);
+            }
+        }
+
+        return lines;
     }
 }
