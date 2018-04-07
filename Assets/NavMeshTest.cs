@@ -45,7 +45,7 @@ public class NavMeshTest : MonoBehaviour {
 
         this.ExportNavMesh();
 
-        TNavMesh.Init("E:/navmesh.txt");
+        TNavMesh.Init("G:/navmesh.txt");
     }
 
     int FindIndex(Vector3 v)
@@ -85,7 +85,7 @@ public class NavMeshTest : MonoBehaviour {
                 indices += ",";
         }
 
-        File.WriteAllLines("E:/navmesh.txt", new string[]{ position, indices });
+        File.WriteAllLines("G:/navmesh.txt", new string[]{ position, indices });
     }
 
     private void OnDrawGizmos()

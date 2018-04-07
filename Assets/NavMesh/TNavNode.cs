@@ -70,8 +70,6 @@ public class TNavNode
         this.gScore = float.MaxValue;
         this.fScore = float.MaxValue;
         this.parent = null;
-
-        this.position = centroid;
     }
 
     public void AddNeighbor(TNavNode neighbor, int edgeIndex)
@@ -80,7 +78,7 @@ public class TNavNode
         this.neighborEdges.Add(edgeIndex);
     }
 
-    public bool FindPortal(TNavNode node, out int left, out int right)
+    public bool FindPortal(TNavNode node, ref int left, ref int right)
     {
         for(int i = 0; i < this.neighbors.Count; i++)
         {
@@ -95,8 +93,6 @@ public class TNavNode
             }
         }
 
-        left = -1;
-        right = -1;
         return false;
     }
 

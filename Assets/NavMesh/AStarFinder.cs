@@ -65,7 +65,7 @@ public class AStarFinder
                 //}
 
                 //neighbor.position = current.position在potal的投影
-                //看起来和上面的方法好像差不多......
+                //路径看起来和上面的方法好像差不多......
                 Vector3 edge = portalRight - portalLeft;
                 float edgeLengthSquare = edge.sqrMagnitude;
                 if (edgeLengthSquare > 0.0001f)
@@ -84,9 +84,14 @@ public class AStarFinder
                 if (gScore >= neighbor.gScore)//neighbor.opened == true的话,neighbor.gCost=MaxValue，gCost一定小于neighbor.gCost
                     continue;
 
+                float fScore = gScore + this.HeuristicCostEstimate(neighbor.position, targetNode.position);
+                //need????
+                if (fScore >= neighbor.fScore)
+                    continue;
+
                 neighbor.parent = current;
                 neighbor.gScore = gScore;
-                neighbor.fScore = neighbor.gScore + this.HeuristicCostEstimate(neighbor.position, targetNode.position);
+                neighbor.fScore = fScore;
 
                 if (neighbor.opened == false)
                 {
@@ -95,6 +100,7 @@ public class AStarFinder
                 }
                 else
                 {
+                    this.openSet.Modify(neighbor);
                 }
             }
         }
